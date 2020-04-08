@@ -1,6 +1,6 @@
-const { model } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
-const User = model('User', {
+const User = model('User', new Schema({
     username: String,
     password: String,
     email: String,
@@ -12,6 +12,6 @@ const User = model('User', {
     state: String,
     postalCode: Number,
     country: String,
-})
+}, {timestamps: true}))
 
 module.exports = User

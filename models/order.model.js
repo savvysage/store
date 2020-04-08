@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const Order = model('Order', {
+const Order = model('Order', new Schema({
     price: Number,
     size: String,
     color: String,
@@ -15,6 +15,6 @@ const Order = model('Order', {
         type: Schema.Types.ObjectId,
         ref: 'Product',
     },
-})
+}, {timestamps: true}))
 
 module.exports = Order

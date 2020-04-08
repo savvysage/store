@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const Product = model('Product', {
+const Product = model('Product', new Schema({
     sku: String,
     name: String,
     description: String,
@@ -20,6 +20,6 @@ const Product = model('Product', {
         type: Schema.Types.ObjectId,
         ref: 'Category',
     },
-})
+}, {timestamps: true}))
 
 module.exports = Product

@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose')
 
-const Shipment = model('Shipment', {
+const Shipment = model('Shipment', new Schema({
     name: String,
     address: String,
     city: String,
@@ -17,6 +17,6 @@ const Shipment = model('Shipment', {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-})
+}, {timestamps: true}))
 
 module.exports = Shipment
