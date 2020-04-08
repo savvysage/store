@@ -12,7 +12,7 @@ app.use('/admin', adminRouter)
 app.use('/', appRouter)
 
 const run = async () => {
-    await mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true})
+    await mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true})
     await app.listen(process.env.PORT, () => console.log(`You are listening to port ${process.env.PORT}.`))
 }
 
