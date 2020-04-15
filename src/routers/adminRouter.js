@@ -1,13 +1,13 @@
 const AdminBro = require('admin-bro')
-const AdminBroExpress = require('admin-bro-expressjs')
 const AdminBroMongoose = require('admin-bro-mongoose')
+const AdminBroExpress = require('admin-bro-expressjs')
 const bcrypt = require('bcrypt')
-const User = require('../models/user.model')
-const Product = require('../models/product.model')
-const ProductCategory = require('../models/product-category.model')
-const Order = require('../models/order.model')
-const Payment = require('../models/payment.model')
-const Shipment = require('../models/shipment.model')
+const User = require('../models/userModel')
+const Product = require('../models/productModel')
+const ProductCategory = require('../models/productCategoryModel')
+const Order = require('../models/orderModel')
+const Payment = require('../models/paymentModel')
+const Shipment = require('../models/shipmentModel')
 
 AdminBro.registerAdapter(AdminBroMongoose)
 
@@ -20,10 +20,6 @@ const customUser = {
             password: {type: 'string', isVisible: {
                 list: false, edit: true, filter: false, show: false,
             }},
-            gender: {availableValues: [
-                {value: 'male', label: 'Male'},
-                {value: 'female', label: 'Female'},
-            ]},
         },
         actions: {
             new: {
@@ -47,12 +43,27 @@ const adminBro = new AdminBro({
     rootPath: '/admin',
 })
 
+const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
+    authenticate: async (email, password) => {
+        const user = await User.findOne({ email })
+        if (user) {
+            const matched = await bcrypt.compare(password, user.encryptedPassword)
+            if (matched) {
+                return user
+            }
+        }
+        return false
+    },
+    cookieName: process.env.ADMIN_COOKIE_NAME,
+    cookiePassword: process.env.ADMIN_COOKIE_PASS,
+})
+
+// const router = AdminBroExpress.buildRouter(adminBro)
+
 // const ADMIN = {
 //     email: process.env.ADMIN_EMAIL,
 //     password: process.env.ADMIN_PASSWORD,
 // }
-
-const router = AdminBroExpress.buildRouter(adminBro)
 
 // const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
 //     cookieName: process.env.ADMIN_COOKIE_NAME,
